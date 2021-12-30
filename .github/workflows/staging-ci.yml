@@ -1,0 +1,44 @@
+# Unique name for this workflow
+name: Staging Validation on PR
+
+# Definition when the workflow should run
+on:
+    pull_request:
+      types: [opened]
+      branches: [ staging ]
+
+# Jobs to be executed
+jobs:
+    scratch-org-test:
+        runs-on: ubuntu-latest
+        needs: format-lint-lwc-tests
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        steps:
+            # Install Salesforce CLI
+            - name: 'Install Salesforce CLI'
+              run: |
+                  wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+                  mkdir ~/sfdx
+                  tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+                  echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+                  ~/sfdx/bin/sfdx version
+            # Checkout the source code
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+
+            # Store secret for dev hub
+            - name: 'Populate auth file with SFDX_URL secret of Staging org'
+              shell: bash
+              run: |
+                  echo ${{ secrets.SFDX_STAGING_URL}} > ./SFDX_STAGING_URL.txt
+            # Authenticate dev hub
+            - name: 'Authenticate to Staging Org'
+              run: sfdx auth:sfdxurl:store -f ./SFDX_STAGING_URL.txt -s -a staging 
+
+            # Create scratch org
+            - name: 'Deploy branch to staging org'
+              run: sfdx force:source:deploy -p force-app --checkonly --testlevel RunLocalTests --json
+
+           
+
+           
