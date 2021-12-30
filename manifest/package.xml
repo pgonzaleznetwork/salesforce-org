@@ -32,6 +32,7 @@
 	<types>
 		<members>Account.Active__c</members>
 		<members>Account.CustomerPriority__c</members>
+		<members>Account.New_field__c</members>
 		<members>Account.NumberofLocations__c</members>
 		<members>Account.SLAExpirationDate__c</members>
 		<members>Account.SLASerialNumber__c</members>
