@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Completion</fullName>
+    <active>true</active>
+    <description>Measure achievement based on whether or not the metric is finished. Ideal for tracking milestones, or when you don&apos;t have metrics based on hard numbers. For example: Become Salesforce Certified.</description>
+    <label>Completion</label>
+</RecordType>

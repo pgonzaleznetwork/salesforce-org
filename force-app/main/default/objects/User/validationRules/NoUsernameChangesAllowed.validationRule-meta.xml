@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NoUsernameChangesAllowed</fullName>
+    <active>true</active>
+    <description>Changing usernames in this org may impact your ability to sign in automatically from Trailhead.</description>
+    <errorConditionFormula>Username != PRIORVALUE(Username)</errorConditionFormula>
+    <errorDisplayField>Username</errorDisplayField>
+    <errorMessage>Please do not change usernames in the Trailhead Playground.</errorMessage>
+</ValidationRule>
