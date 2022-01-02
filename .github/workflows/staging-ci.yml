@@ -1,15 +1,15 @@
 # Unique name for this workflow
-name: Staging Validation on PR
+name: Integration Validation on PR
 
 # Definition when the workflow should run
 on:
     pull_request:
       types: [opened]
-      branches: [ staging ]
+      branches: [ integration ]
 
 # Jobs to be executed
 jobs:
-    scratch-org-test:
+    validate-deployment-on-integration-org:
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
@@ -26,16 +26,16 @@ jobs:
               uses: actions/checkout@v2
 
             # Store secret for dev hub
-            - name: 'Populate auth file with SFDX_URL secret of Staging org'
+            - name: 'Populate auth file with SFDX_URL secret of integration org'
               shell: bash
               run: |
-                  echo ${{ secrets.SFDX_STAGING_URL}} > ./SFDX_STAGING_URL.txt
+                  echo ${{ secrets.SFDX_INTEGRATION_URL}} > ./SFDX_INTEGRATION_URL.txt
             # Authenticate dev hub
             - name: 'Authenticate to Staging Org'
-              run: sfdx auth:sfdxurl:store -f ./SFDX_STAGING_URL.txt -s -a staging 
+              run: sfdx auth:sfdxurl:store -f ./SFDX_INTEGRATION_URL.txt -s -a integration 
 
-            # Create scratch org
-            - name: 'Deploy branch to staging org'
+            # Check only deploy
+            - name: 'Do a check-only deployment of the PR branch to integration org'
               run: sfdx force:source:deploy -p force-app --checkonly --testlevel RunLocalTests --json
 
            
