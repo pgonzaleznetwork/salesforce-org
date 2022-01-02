@@ -41,13 +41,15 @@ jobs:
                   sfdx plugins 
 
             - name: 'Create delta packages for new, modified or deleted metadata'
-            - run: sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+            - run: | 
+                  mkdir changed-sources
+                  sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/ 
 
             - name: 'Deploy delta changes'
-            - run: sfdx force:source:deploy -x package/package.xml
+            - run: sfdx force:source:deploy -p changed-sources/force-app
 
             - name: 'Deploy destructive changes (if any)'
-            - run: sfdx force:mdapi:deploy -d destructiveChanges --ignorewarnings
+            - run: sfdx force:mdapi:deploy -d changed-sources/destructiveChanges --ignorewarnings
 
             
 
