@@ -4,7 +4,7 @@ name: Validate PR on integration branch
 # Definition when the workflow should run
 on:
     pull_request:
-      types: [opened]
+      types: [opened, synchronize]
       branches: [ integration ]
             
 

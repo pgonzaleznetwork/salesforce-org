@@ -9,7 +9,7 @@ public with sharing class ChangePasswordController {
     public String usedVariable = 'hi';
     
     public PageReference changePassword() {
-
+        //sync pr
         return Site.changePassword(newPassword, verifyNewPassword, oldpassword);    
     }     
     
