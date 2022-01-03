@@ -50,6 +50,7 @@ jobs:
 
             - name: 'Scan code'
               run: |
+                  sudo apt-get install openjdk-8-jdk
                   cd changed-sources
                   sfdx scanner:run --format csv --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.csv'  
                   cd ..
