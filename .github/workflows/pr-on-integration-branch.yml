@@ -1,10 +1,11 @@
 # Unique name for this workflow
-name: Deploy feature or bug branch to integration org
+name: Validate PR on integration branch
 
 # Definition when the workflow should run
 on:
-    push:
-        branches: ['feature/**','bug/**']
+    pull_request:
+      types: [opened]
+      branches: [ integration ]
             
 
 # Jobs to be executed
@@ -24,6 +25,8 @@ jobs:
             # Checkout the source code
             - name: 'Checkout source code'
               uses: actions/checkout@v2
+              with:
+                fetch-depth: 0
 
             # Store secret for dev hub
             - name: 'Populate auth file with SFDX_URL secret of integration org'
@@ -41,15 +44,27 @@ jobs:
                   sfdx plugins 
 
             - name: 'Create delta packages for new, modified or deleted metadata'
-            - run: | 
+              run: | 
                   mkdir changed-sources
                   sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/ 
 
-            - name: 'Deploy delta changes'
-            - run: sfdx force:source:deploy -p changed-sources/force-app
+            - name: 'Scan code'
+              run: |
+                  cd changed-sources
+                  sfdx scanner:run --format csv --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.csv'  
+                  cd ..
+
+            - name: Upload code scan results
+              uses: actions/upload-artifact@v2
+              with:
+                name: code-scan-report
+                path: changed-sources/apexScanResults.csv
+
+            - name: 'Check-only deploy delta changes'
+              run: sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunLocalTests --json
 
             - name: 'Deploy destructive changes (if any)'
-            - run: sfdx force:mdapi:deploy -d changed-sources/destructiveChanges --ignorewarnings
+              run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 
 
             
 
