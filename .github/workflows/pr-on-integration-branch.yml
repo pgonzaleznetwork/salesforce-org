@@ -19,6 +19,12 @@ jobs:
               with:
                 node-version: '14'
 
+            # Checkout the source code
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+              with:
+                fetch-depth: 0
+
             - name: 'Read PR Body'
               env:
                 PAYLOAD: ${{github.event.pull_request.body}}
@@ -54,11 +60,7 @@ jobs:
             - name: 'Installing SFDX scanner'
               run: sfdx plugins:install @salesforce/sfdx-scanner
 
-            # Checkout the source code
-            - name: 'Checkout source code'
-              uses: actions/checkout@v2
-              with:
-                fetch-depth: 0
+            
 
             # Store secret for dev hub
             - name: 'Populate auth file with SFDX_URL secret of integration org'
