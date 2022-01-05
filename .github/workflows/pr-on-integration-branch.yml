@@ -14,6 +14,12 @@ jobs:
         runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
+
+            - name: 'Print CI info'
+              env:
+                PAYLOAD: ${{github.event.pull_request.body}}
+              run: echo $PAYLOAD
+              
             # Install Salesforce CLI
             - name: 'Install Salesforce CLI'
               run: |
@@ -29,10 +35,7 @@ jobs:
                   echo y | sfdx plugins:install sfdx-git-delta
                   sfdx plugins 
 
-            - name: 'Print CI info'
-              env:
-                PAYLOAD: github.event.pull_request.body
-              run: echo $PAYLOAD
+            
 
             # Install java
             - name: 'Installing java'
