@@ -31,7 +31,7 @@ jobs:
 
             - name: 'Print CI info'
               env:
-                PAYLOAD: ${{fromJSON(github)}}
+                PAYLOAD: ${{toJson(github)}}
               run: echo $PAYLOAD
 
             # Install java
