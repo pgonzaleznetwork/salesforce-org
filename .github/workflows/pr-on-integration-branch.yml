@@ -30,7 +30,9 @@ jobs:
                   sfdx plugins 
 
             - name: 'Print CI info'
-              run: echo ${{fromJSON(github.event)}}
+              env:
+                PAYLOAD: ${{fromJSON(github.event)}}
+              run: echo $PAYLOAD
 
             # Install java
             - name: 'Installing java'
