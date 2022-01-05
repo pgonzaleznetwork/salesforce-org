@@ -24,7 +24,8 @@ jobs:
                 PAYLOAD: ${{github.event.pull_request.body}}
               run: |
                   echo $PAYLOAD > ./pr_body.txt
-                  node parsePR.js
+                  ls ./parsePR.js
+                  node ./parsePR.js
                   TESTS=$(cat testsToRun.txt) 
                   echo $TESTS
 
