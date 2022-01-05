@@ -15,11 +15,15 @@ jobs:
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
 
-            - name: 'Print CI info'
+            - name: 'Read PR Body'
               env:
                 PAYLOAD: ${{github.event.pull_request.body}}
-              run: echo $PAYLOAD
-              
+              run: |
+                  echo $PAYLOAD > ./pr_body.txt
+                  node node parsePR.js
+                  TESTS=$(cat testsToRun.txt) 
+                  echo $TESTS
+
             # Install Salesforce CLI
             - name: 'Install Salesforce CLI'
               run: |
