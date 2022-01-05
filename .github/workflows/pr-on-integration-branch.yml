@@ -29,6 +29,9 @@ jobs:
                   echo y | sfdx plugins:install sfdx-git-delta
                   sfdx plugins 
 
+            - name: 'Print CI info'
+              run: echo ${{github.event	}}
+
             # Install java
             - name: 'Installing java'
               run: sudo apt-get install openjdk-8-jdk
