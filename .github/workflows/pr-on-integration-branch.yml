@@ -33,7 +33,8 @@ jobs:
                   node ./parsePR.js
                   TESTS=$(cat testsToRun.txt) 
                   echo $TESTS
-                  echo "::set-env name=TESTS::$TESTS"
+                  echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
+                  
 
             # Install Salesforce CLI
             - name: 'Install Salesforce CLI'
@@ -89,7 +90,7 @@ jobs:
 
             - name: 'Check-only deploy delta changes'
               run: |
-                  echo $TESTS
+                  echo ${{env.APEX_TESTS}}
                   sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunLocalTests --json
 
             - name: 'Deploy destructive changes (if any)'
