@@ -30,7 +30,9 @@ jobs:
                 PAYLOAD: ${{github.event.pull_request.body}}
               run: |
                   echo $PAYLOAD > ./pr_body.txt
+                  cat ./pr_body.txt  
                   node ./parsePR.js
+                  cat testsToRun.txt
                   TESTS=$(cat testsToRun.txt) 
                   echo $TESTS
                   echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
