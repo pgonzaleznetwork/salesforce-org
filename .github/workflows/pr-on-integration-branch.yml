@@ -25,17 +25,13 @@ jobs:
               with:
                 fetch-depth: 0
 
-            - name: 'Read PR Body'
-              env:
-                PAYLOAD: ${{github.event.pull_request.body}}
+            - name: 'Read PR Body' 
               run: |
-                  echo $PAYLOAD > ./pr_body.txt
+                  echo ${{github.event.pull_request.body}} > ./pr_body.txt
                   node ./parsePR.js
                   TESTS=$(cat testsToRun.txt) 
-                  echo $TESTS
                   echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
                   
-
             # Install Salesforce CLI
             - name: 'Install Salesforce CLI'
               run: |
@@ -58,8 +54,6 @@ jobs:
             # Install SFDX scanner
             - name: 'Installing SFDX scanner'
               run: sfdx plugins:install @salesforce/sfdx-scanner
-
-            
 
             # Store secret for dev hub
             - name: 'Populate auth file with SFDX_URL secret of integration org'
