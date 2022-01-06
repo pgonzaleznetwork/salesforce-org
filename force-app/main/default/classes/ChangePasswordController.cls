@@ -8,6 +8,7 @@ public with sharing class ChangePasswordController {
     
     public PageReference changePassword() {
         //comment in line 10 from local branch
+        //comment in line 10 from integration branch
         return Site.changePassword(newPassword, verifyNewPassword, oldpassword);    
     }     
     
