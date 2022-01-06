@@ -25,9 +25,11 @@ jobs:
               with:
                 fetch-depth: 0
 
-            - name: 'Read PR Body' 
+            - name: 'Read PR Body'
+              env:
+                PAYLOAD: ${{github.event.pull_request.body}}
               run: |
-                  echo ${{github.event.pull_request.body}} > ./pr_body.txt
+                  echo $PAYLOAD > ./pr_body.txt
                   node ./parsePR.js
                   TESTS=$(cat testsToRun.txt) 
                   echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
