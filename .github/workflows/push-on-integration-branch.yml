@@ -34,7 +34,7 @@ jobs:
               with:
                 fetch-depth: 0
 
-            # Store secret for dev hub
+            # Store secret for both otgs
             - name: 'Populate auth file with SFDX_URL secret of the integration and staging orgs'
               shell: bash
               run: |
@@ -65,9 +65,3 @@ jobs:
 
             - name: 'Deploy destructive changes (if any) to Staging org'
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings
-
-            
-
-           
-
-           
