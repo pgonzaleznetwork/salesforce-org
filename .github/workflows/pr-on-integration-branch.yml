@@ -84,10 +84,16 @@ jobs:
                 name: code-scan-report
                 path: changed-sources/apexScanResults.csv
 
-            - name: 'Check-only deploy delta changes'
+            - name: 'Check-only deploy delta changes - run specified tests'
+              if: ${{ env.APEX_TESTS != 'all' }}
               run: |
                   echo ${{env.APEX_TESTS}}
                   sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunSpecifiedTests --runtests ${{env.APEX_TESTS}} --json
+
+            - name: 'Check-only deploy delta changes - run all tests'
+              if: ${{ env.APEX_TESTS == 'all' }}
+              run: |
+                  sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunLocalTests  --json
 
             - name: 'Deploy destructive changes (if any)'
               run: sfdx force:mdapi:deploy -d "changed-sources/destructiveChanges" --checkonly --ignorewarnings 

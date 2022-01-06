@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline')
 
-async function parseText(){
+async function extractTests(){
+
+    //by default we specify that all tests should run
+    let testsFile = __dirname+'/testsToRun.txt';
+    await fs.promises.writeFile(testsFile,'all');
 
     const lines = readline.createInterface({
         input: fs.createReadStream(__dirname+'/pr_body.txt'),
@@ -10,13 +14,14 @@ async function parseText(){
     });
 
     for await (const line of lines) {
-        if(line.includes('[') && line.includes(']')){
+        
+        if(line.includes('Apex::[') && line.includes(']::Apex')){
 
-            let tests = line.substring(2,line.length-1);
-            await fs.promises.writeFile(__dirname+'/testsToRun.txt',tests);
-            await fs.promises.appendFile(__dirname+'/testsToRun.txt','\n');
+            let tests = line.substring(7,line.length-7);
+            await fs.promises.writeFile(testsFile,tests);
+            await fs.promises.appendFile(testsFile,'\n');
         }
     }
 }
 
-parseText();
+extractTests();
