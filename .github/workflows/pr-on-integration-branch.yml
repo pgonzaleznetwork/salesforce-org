@@ -31,7 +31,7 @@ jobs:
               uses: actions/checkout@v2
               with:
                 fetch-depth: 0
-                
+
             - uses: actions/github-script@v5
               with:
                 script: |
@@ -117,8 +117,13 @@ jobs:
             - name: 'Scan code'
               run: |
                   cd changed-sources
-                  sfdx scanner:run --format csv --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.csv'  
+                  sfdx scanner:run --format sarif --target './**/*.cls' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'  
                   cd ..
+
+            - name: Upload SARIF file
+              uses: github/codeql-action/upload-sarif@v1
+              with:
+                sarif_file: apexScanResults.sarif
 
             # This action allows us to upload the file created in the previous step to the action UI in Github.
             # This way a tech lead can download the results and determine if any code changes are required
