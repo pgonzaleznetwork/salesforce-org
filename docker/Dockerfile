@@ -23,11 +23,11 @@ RUN apk add --update --no-cache  \
 # install sfdx
 RUN npm install sfdx-cli --global
 RUN sfdx --version
-RUN sfdx plugins --core
 
 # install sfdx-git-delta
 RUN echo y | sfdx plugins:install sfdx-git-delta
-RUN sfdx plugins 
 
 # install the sfdx code scanner
 RUN sfdx plugins:install @salesforce/sfdx-scanner
+
+RUN sfdx plugins 
