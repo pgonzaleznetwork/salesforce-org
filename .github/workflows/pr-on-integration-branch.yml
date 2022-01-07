@@ -9,6 +9,10 @@ on:
       types: [opened, synchronize]
       # We only care about pull requests against (NOT from) the integration branch
       branches: [ integration ]
+      # We only care about changes to the force-app directory. This prevents the job from running
+      # when changing non-salesforce files (like this yml file).
+      paths:
+        - 'force-app/**'
             
 
 # Jobs to be executed

@@ -5,6 +5,8 @@ name: Deploy master branch to production org
 on:
     push:
       branches: [ master ]
+      paths:
+        - 'force-app/**'
             
 
 # Jobs to be executed
