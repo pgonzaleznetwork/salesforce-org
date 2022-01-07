@@ -7,7 +7,6 @@ on:
       # This workflow will run when a pull request is opened, or when a commit is pushed
       # to a branch that has an existing pull request
       types: [opened, synchronize]
-      # We only care about pull requests against (NOT from) the integration branch
       branches: [ integration ]
       # We only care about changes to the force-app directory. This prevents the job from running
       # when changing non-salesforce files (like this yml file).
@@ -18,10 +17,14 @@ on:
 # Jobs to be executed
 jobs:
     validate-deployment-on-integration-org:
-        container: happysoup/ultimate-sfdx:latest
+        runs-on: ubuntu-latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
-            
+            # Install nodejs
+            - uses: actions/setup-node@v2
+              with:
+                node-version: '14'
+
             # Checkout the source code
             - name: 'Checkout source code'
               uses: actions/checkout@v2
@@ -51,13 +54,33 @@ jobs:
               # were using a normal env variable, its value would not be available outside this step.
               run: |
                   echo $PAYLOAD > ./pr_body.txt
-                  cat ./pr_body.txt  
-                  node ./parsePR.js
-                  cat testsToRun.txt
-                  TESTS=$(cat testsToRun.txt) 
-                  echo $TESTS
+                  node ./parsePR.js              
+                  TESTS=$(cat testsToRun.txt)       
                   echo "APEX_TESTS=$TESTS" >> $GITHUB_ENV
-                   
+                  
+            # Install Salesforce CLI
+            - name: 'Install Salesforce CLI'
+              run: |
+                  wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+                  mkdir ~/sfdx
+                  tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+                  echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+                  ~/sfdx/bin/sfdx version
+
+            # install SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
+            - name: 'Installing sfdx git delta'
+              run: | 
+                  echo y | sfdx plugins:install sfdx-git-delta
+                  sfdx plugins 
+
+            # Install java
+            - name: 'Installing java'
+              run: sudo apt-get install openjdk-8-jdk
+
+            # Install SFDX scanner
+            - name: 'Installing SFDX scanner'
+              run: sfdx plugins:install @salesforce/sfdx-scanner
+
             # Get the Integration Org SFDX URL and store it in a text file
             - name: 'Populate auth file with SFDX_URL secret of integration org'
               shell: bash
@@ -76,7 +99,7 @@ jobs:
                   sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/ 
 
             # Scan the code in the delta directory by using sfdx scanner. Output the results of the scan in a new file
-            # called apexScanResults.csv
+            # called apexScanResults.sarif
             - name: 'Scan code'
               run: |
                   cd changed-sources
