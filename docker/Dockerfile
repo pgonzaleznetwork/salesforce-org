@@ -17,7 +17,11 @@ RUN apk add --update --no-cache  \
       jq \
       gettext \
       xmlstarlet \
-      ca-certificates
+      ca-certificates 
+
+
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+RUN export JAVA_HOME
 
 
 # install sfdx
