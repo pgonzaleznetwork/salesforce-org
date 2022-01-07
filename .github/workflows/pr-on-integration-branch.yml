@@ -69,6 +69,9 @@ jobs:
             - name: 'Authenticate to Integration Org'
               run: sfdx auth:sfdxurl:store -f ./SFDX_INTEGRATION_URL.txt -s -a integration
 
+            - name: 'Check which plugins are installed'
+              run: sfdx plugins
+
             # We use SFDX Git Delta to create a directory with only the metadata that has changed, this allows us
             # to deploy only those changes, as opposed to deploying the entire branch. This helps reducing deployment times
             - name: 'Create delta packages for new, modified or deleted metadata'
