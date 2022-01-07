@@ -25,9 +25,11 @@ RUN npm install sfdx-cli --global
 RUN sfdx --version
 
 # install sfdx-git-delta
-RUN echo y | sfdx plugins:install sfdx-git-delta
+# RUN echo y | sfdx plugins:install sfdx-git-delta
 
 # install the sfdx code scanner
-RUN sfdx plugins:install @salesforce/sfdx-scanner
+# RUN sfdx plugins:install @salesforce/sfdx-scanner
+
+RUN mkdir .local && chmod g+rwx .local  && echo 'y' | sfdx plugins:install sfpowerkit && sfdx plugins:install @salesforce/sfdx-scanner
 
 RUN sfdx plugins 
