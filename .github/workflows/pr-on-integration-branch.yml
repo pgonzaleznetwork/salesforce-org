@@ -18,7 +18,7 @@ on:
 # Jobs to be executed
 jobs:
     validate-deployment-on-integration-org:
-        runs-on: macos-latest
+        runs-on: ubuntu-latest
         container: happysoup/ultimate-sfdx:latest
         if: ${{ github.actor != 'dependabot[bot]' }}
         steps:
