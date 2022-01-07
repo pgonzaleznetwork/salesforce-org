@@ -8,6 +8,7 @@ public with sharing class ChangePasswordController {
     
     public PageReference changePassword() {
         //change added in remote branch
+        System.debug(true);
         return Site.changePassword(newPassword, verifyNewPassword, oldpassword);    
     }     
     
