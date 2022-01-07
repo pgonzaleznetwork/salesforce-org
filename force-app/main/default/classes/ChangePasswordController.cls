@@ -7,6 +7,8 @@ public with sharing class ChangePasswordController {
     public String verifyNewPassword {get; set;}        
     
     public PageReference changePassword() {
+        System.debug(true);
+        String a = 'hi';
         return Site.changePassword(newPassword, verifyNewPassword, oldpassword);    
     }     
     
