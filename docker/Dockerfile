@@ -13,26 +13,14 @@ RUN apk add --update --no-cache  \
       bash \
       nodejs \
       npm \
-      openjdk8-jre \
       jq \
       gettext \
       xmlstarlet \
       ca-certificates 
 
-
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
-RUN export JAVA_HOME
-
-
 # install sfdx
 RUN npm install sfdx-cli --global
 RUN sfdx --version
-
-# install sfdx-git-delta
-# RUN echo y | sfdx plugins:install sfdx-git-delta
-
-# install the sfdx code scanner
-# RUN sfdx plugins:install @salesforce/sfdx-scanner
 
 ENV XDG_DATA_HOME=/sfdx_plugins/.local/share
 ENV XDG_CONFIG_HOME=/sfdx_plugins/.config
