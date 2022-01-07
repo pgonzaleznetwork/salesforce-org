@@ -1,5 +1,9 @@
 public with sharing class UltimateClass {
     public UltimateClass() {
-        System.debug('do nothing');
+        String a = 'hi';
+        String b = null;
+        if(a == 'hi'){
+            b = 'great';
+        }
     }
 }
