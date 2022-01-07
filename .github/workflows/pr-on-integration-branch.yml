@@ -115,24 +115,6 @@ jobs:
               with:
                 sarif_file: changed-sources/apexScanResults.sarif
 
-            - uses: actions/github-script@v5
-              with:
-                script: |
-                  github.rest.issues.createComment({
-                    issue_number: context.issue.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    body: 'There were issues with the code'
-                  })
-
-            # This action allows us to upload the file created in the previous step to the action UI in Github.
-            # This way a tech lead can download the results and determine if any code changes are required
-            - name: Upload code scan results
-              uses: actions/upload-artifact@v2
-              with:
-                name: code-scan-report
-                path: changed-sources/apexScanResults.sarif
-
             # We do a check-only depploy and we only run the tests specified in the PR
             # If the env variable does not equal 'all', we know that there is a list of
             # tests that can be run
@@ -142,7 +124,7 @@ jobs:
                   echo ${{env.APEX_TESTS}}
                   sfdx force:source:deploy -p "changed-sources/force-app" --checkonly --testlevel RunSpecifiedTests --runtests ${{env.APEX_TESTS}} --json
 
-            # We do a check-only depploy and we run all tests
+            # We do a check-only deploy and we run all tests
             - name: 'Check-only deploy delta changes - run all tests'
               if: ${{ env.APEX_TESTS == 'all' }}
               run: |
