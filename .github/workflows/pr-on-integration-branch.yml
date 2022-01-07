@@ -31,6 +31,16 @@ jobs:
               uses: actions/checkout@v2
               with:
                 fetch-depth: 0
+                
+            - uses: actions/github-script@v5
+              with:
+                script: |
+                  github.rest.issues.createComment({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: '👋 Thanks for reporting!'
+                  })
 
             # Read the body of the pull request and extract the names of the
             # tests classes that should be run when deploying the changes on this commit
