@@ -32,16 +32,6 @@ jobs:
               with:
                 fetch-depth: 0
 
-            - uses: actions/github-script@v5
-              with:
-                script: |
-                  github.rest.issues.createComment({
-                    issue_number: context.issue.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    body: '👋 Thanks for reporting!'
-                  })
-
             # Read the body of the pull request and extract the names of the
             # tests classes that should be run when deploying the changes on this commit
             
@@ -123,7 +113,17 @@ jobs:
             - name: Upload SARIF file
               uses: github/codeql-action/upload-sarif@v1
               with:
-                sarif_file: apexScanResults.sarif
+                sarif_file: ./apexScanResults.sarif
+
+            - uses: actions/github-script@v5
+              with:
+                script: |
+                  github.rest.issues.createComment({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    body: 'There were issues with the code'
+                  })
 
             # This action allows us to upload the file created in the previous step to the action UI in Github.
             # This way a tech lead can download the results and determine if any code changes are required
