@@ -13,7 +13,7 @@ public with sharing class ForgotPasswordController {
   		vfPage.setRedirect(true);
   		
   		if (success) {  			
-			System.debug('success worked!');
+			
   			return vfPage;
   		}
   		return null;
