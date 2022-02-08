@@ -7,7 +7,7 @@ on:
       # This workflow will run when a pull request is opened, or when a commit is pushed
       # to a branch that has an existing pull request
       types: [opened, synchronize]
-      branches: [ integration ]
+      branches: [ development ]
       # We only care about changes to the force-app directory. This prevents the job from running
       # when changing non-salesforce files (like this yml file).
       paths:
