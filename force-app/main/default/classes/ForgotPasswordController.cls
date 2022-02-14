@@ -11,8 +11,7 @@ public with sharing class ForgotPasswordController {
   		PageReference pageReference = Page.ForgotPasswordConfirm;
   		pageReference.setRedirect(true);
   		
-  		if (success) {
-			System.debug('This worked!');			
+  		if (success) {			
   			return pageReference;
   		}
   		return null;
